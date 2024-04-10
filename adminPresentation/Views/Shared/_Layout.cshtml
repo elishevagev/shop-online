@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - ShopOnline</title>
+    @Styles.Render("~/Content/css")
+    @*@Scripts.Render("~/bundles/modernizr")*@
+</head>
+<body>
+
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar-->
+        <div class="border-end bg-white" id="sidebar-wrapper">
+            <div class="sidebar-heading border-bottom bg-light">MyShopOnline</div>
+            <div class="list-group list-group-flush">
+                <div class="sb-sidenav-menu-heading">Summary</div>
+                <hr />
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="@Url.Action("Index","Home")">Dashboard</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="@Url.Action("Users","Home")">Users</a>
+                <div class="sb-sidenav-menu-heading">Maintenance</div>
+                <hr />
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="@Url.Action("Category","admin")">Categories</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="@Url.Action("Brand","admin")">Brands</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="@Url.Action("Product","admin")">Products</a>
+
+            </div>
+
+        </div>
+        <!-- Page content wrapper-->
+        <div id="page-content-wrapper">
+            <!-- Top navigation-->
+            <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+                <div class="container-fluid">
+                    <button class="btn btn-primary" id="sidebarToggle">Menu</button>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+                            <li class="nav-item active"><a class="nav-link" href="@Url.Action("LogOut","Access")">Log Out</a></li>
+                            
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <!-- Page content-->
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/complements")    
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+
+
+@*@RenderBody()
+<li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+<li>@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+<li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>*@

@@ -1,0 +1,192 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<h1 class="mt-4">Dashboard</h1>
+<ol>
+    <li class="breadcrumb-item active">Dashboard</li>
+</ol>
+
+<div class="row">
+    <div class="col-xl-3 col-md-6">
+        <div class="card bg-success text-white mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-9">
+                        <h6>Number of clients</h6>
+                        <h6 id="totalcustomer">0</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="card bg-warning text-white mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-9">
+                        <h6>Number of sales</h6>
+                        <h6 id="totalsale">0</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="card bg-secondary text-white mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-9">
+                        <h6>Number of products</h6>
+                        <h6 id="totalproduct">0</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        Sales history
+    </div>
+    <div class="card-body">
+
+        <form>
+            <div class="row align-items-end">
+                <div class="col-sm-2">
+                    <div class="mb-2">
+                        <label class="form-label">Start Date:</label>
+                        <input class="form-control" type="text" id="txtstartdate" name="startdate" />
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="mb-2">
+                        <label class="form-label">End Date:</label>
+                        <input class="form-control" type="text" id="txtenddate" name="enddate" />
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="mb-2">
+                        <label class="form-label">Id Transaction:</label>
+                        <input class="form-control" type="text" id="txtidtransaction" name="idtransaction" />
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="d-grid mb-2">
+                        <button class="btn btn-primary" id="btnsearch" type="button">Search</button>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="d-grid mb-2">
+                        <button class="btn btn-success" type="submit">Export</button>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+
+        <hr />
+
+        <div class="row">
+            <div class="col-sm-12">
+                <table id="table" class="display cell-border" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Date Sale</th>
+                            <th>Customer</th>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Amount</th>
+                            <th>Total</th>
+                            <th>ID Transaction</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section scripts{
+    <script src="~/jquery-ui/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+    <script src="~/jquery-ui/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="~/jquery-ui/jquery-ui-1.12.1.custom/jquery-ui.css" />
+    <link rel="stylesheet" href="~/jquery-ui/jquery-ui-1.12.1.custom/jquery-ui.min.css" />
+    <link rel="stylesheet" href="~/jquery-ui/jquery-ui-1.12.1.custom/jquery-ui.structure.css" />
+    <link rel="stylesheet" href="~/jquery-ui/jquery-ui-1.12.1.custom/jquery-ui.structure.min.css" />
+    <link rel="stylesheet" href="~/jquery-ui/jquery-ui-1.12.1.custom/jquery-ui.theme.css" />
+    <link rel="stylesheet" href="~/jquery-ui/jquery-ui-1.12.1.custom/jquery-ui.theme.min.css" />
+
+    <script>
+
+        $(document).ready(function () {
+            $("#txtstartdate").datepicker({ dateFormat: 'dd/mm/yy' }).datepicker('setDate', new Date())
+            $("#txtenddate").datepicker({ dateFormat: 'dd/mm/yy' }).datepicker('setDate', new Date())
+
+            jQuery.ajax({
+                url: '@Url.Action("VistDashBoard", "home")',
+                type: "GET",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    var objeto = data.result;
+                    $("#totalcustomer").text(objeto.TotalCustomer);
+                    $("#totalsale").text(objeto.TotalSale);
+                    $("#totalproduct").text(objeto.TotalProduct);
+                }
+            });
+
+            var Url = '@Url.Action("ListReport","Home")' +
+            "?startdate=" +$("#txtstartdate").val() +
+            "&enddate="+ $("#txtenddate").val() +
+            "&idtransaction="+ $("#txtidtransaction").val()
+
+
+            tabledata = $("#table").DataTable({
+                responsive: true,
+                ordering: false,
+                "ajax": {
+                    url: Url,
+                    type: "GET",
+                    dataType: "json",
+                },
+                "columns": [
+                    { "data": "DateSale" },
+                    { "data": "Customer" },
+                    { "data": "Product" },
+                    { "data": "Price" },
+                    { "data": "Amount" },
+                    { "data": "Total" },
+                    { "data": "IdTransaction" },
+
+
+                ]
+
+            });
+
+
+        })
+
+        $("#btnsearch").on("click", function () {
+            var new_url = '@Url.Action("ListReport","Home")' +
+            "?startdate=" + $("#txtstartdate").val() +
+            "&enddate=" + $("#txtenddate").val() +
+            "&idtransaction="+ $("#txtidtransaction").val()
+
+            tabledata.ajax.url(new_url).load();
+
+        })
+
+
+    </script>
+
+
+}

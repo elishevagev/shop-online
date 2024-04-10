@@ -1,0 +1,88 @@
+﻿@model EntityCa.Product
+@{
+    ViewBag.Title = "ProductDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="data:image/@Html.DisplayTextFor(m => m.Extension);base64,@Html.DisplayTextFor(m=>m.Base64)" alt="..." /></div>
+            <div class="col-md-6">
+                <div class="small mb-1">Brand: @Html.DisplayTextFor(m => m.oBrand.Description)</div>
+                <h1 class="display-5 fw-bolder">@Html.DisplayTextFor(m => m.Name)</h1>
+                <div class="fs-5 mb-5">
+                    @*<span class="text-decoration-line-through">$45.00</span>*@
+                    <span>@Html.DisplayTextFor(m => m.Price) USD</span>
+                </div>
+                <p class="lead">@Html.DisplayTextFor(m => m.Description)</p>
+                <div class="d-flex">
+                    <a href="@Url.Action("Index","Shop")" class="btn btn-danger w-50 text-center me-3">
+                        Back
+                    </a>
+
+                    @if (Session["Customer"] != null)
+                    {
+                        <button class="btn btn-success addcart flex-shrink-0 w-50" type="button" data-idproduct="@Html.DisplayTextFor(m => m.IdProduct)">
+                            <i class="bi-cart-fill me-1"></i>
+                            Add to cart
+                        </button>
+                    }
+
+                </div>
+                @if (Model.Stock > 0)
+                {
+                    <div class="text-success fs-5">Stock: @Model.Stock units available</div>
+                }
+                else
+                {
+                    <div class="text-danger fs-5">Out of stock</div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+@section scripts{
+    
+    
+    <script>
+        $(document).on("click", "button.addcart", function () {
+            console.log($(this).data("idproduct"))
+
+            jQuery.ajax({
+                url: '@Url.Action("AddCart", "Shop")',
+                type: 'POST',
+                data: JSON.stringify({ idproduct: $(this).data("idproduct") }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data.res) {
+                        ShowTotalCart();
+
+                        @*swal({
+                            title: "Added to cart",
+                            text: "Do you want to go to the cart?",
+                            type: "success",
+                            showCancelButton: true,
+                            confirmButtonClass: "btn-primary",
+                            confirmButtonText: "Yes",
+                            cancelButtonText: "No",
+                            closeOnConfirm: true
+                        }, function () {
+                            window.location.href = '@Url.Action("Cart","Shop")'
+                        })*@
+                        swal("", "Added to cart", "success");
+                    } else {
+                        swal("", data.message, "warning");
+                    }
+                }
+            });
+
+
+        })
+    </script>
+    
+    
+    
+    }

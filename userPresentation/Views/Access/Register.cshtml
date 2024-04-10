@@ -1,0 +1,91 @@
+﻿@model EntityCa.Customer
+
+@{ 
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Register</title>
+    <link href="~/Content/Site.css" rel="stylesheet" />
+</head>
+<body class="bg-primary">
+    <div id="layoutAuthentication">
+        <div id="layoutAuthentication_content">
+            <main>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-7">
+                            <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                <div class="card-header"><h3 class="text-center font-weight-light my-4">Create an account </h3></div>
+                                <div class="card-body">
+                                    <form "@Url.Action("Register","Access")" method="post">
+
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <div class="form-floating mb-3 mb-bd-0">
+                                                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @id = "txtname", @placeholder = ".", value = ViewData["Name"] })
+                                                    @Html.Label("txtname", "Name")
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-floating">
+                                                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @id = "txtlastname", @placeholder = ".", value = ViewData["LastName"] })
+                                                    @Html.Label("txtlastname", "LastName")
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @id = "txtemail", @placeholder = ".", value = ViewData["Email"] })
+                                            @Html.Label("txtemail", "Email")
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <div class="form-floating mb-3 mb-md-0">
+                                                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", @id = "txtpassword", @placeholder = "."})
+                                                    @Html.Label("txtpassword", "Password")
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-floating mb-3 mb-md-0">
+                                                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @id = "txtconfirmpassword", @placeholder = "." })
+                                                    @Html.Label("txtconfimpassword", "Confirm Password")
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @{
+                                            if (ViewBag.Error != null)
+                                            {
+                                                <div class="row mb-3">
+                                                    <div class="alert alert-danger" role="alert">
+                                                        @ViewBag.Error
+                                                    </div>
+
+                                                </div>
+                                            }
+                                        }
+                                        <div class="mt-0 mb-0">
+                                            <div class="d-grid"><button class="btn btn-primary btn-block" type="submit">Create Account</button></div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="card-footer text-center py-3">
+                                    <div class="small"><a href="@Url.Action("Index","Access")">"Do you have an account? Log in"</a></div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </main>
+        </div>
+
+    </div>
+    <script src="~/Scripts/bootstrap.bundle.js"></script>
+</body>
+</html>

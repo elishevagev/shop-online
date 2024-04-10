@@ -1,0 +1,9 @@
+C:\Users\rayze\OneDrive\Desktop\אלי7\תקשורת מחשבים\OnlineShop\ShopOnline\DataCa\bin\Debug\DataCa.dll
+C:\Users\rayze\OneDrive\Desktop\אלי7\תקשורת מחשבים\OnlineShop\ShopOnline\DataCa\bin\Debug\DataCa.pdb
+C:\Users\rayze\OneDrive\Desktop\אלי7\תקשורת מחשבים\OnlineShop\ShopOnline\DataCa\bin\Debug\EntityCa.dll
+C:\Users\rayze\OneDrive\Desktop\אלי7\תקשורת מחשבים\OnlineShop\ShopOnline\DataCa\bin\Debug\EntityCa.pdb
+C:\Users\rayze\OneDrive\Desktop\אלי7\תקשורת מחשבים\OnlineShop\ShopOnline\DataCa\obj\Debug\DataCa.csproj.AssemblyReference.cache
+C:\Users\rayze\OneDrive\Desktop\אלי7\תקשורת מחשבים\OnlineShop\ShopOnline\DataCa\obj\Debug\DataCa.csproj.CoreCompileInputs.cache
+C:\Users\rayze\OneDrive\Desktop\אלי7\תקשורת מחשבים\OnlineShop\ShopOnline\DataCa\obj\Debug\DataCa.csproj.Up2Date
+C:\Users\rayze\OneDrive\Desktop\אלי7\תקשורת מחשבים\OnlineShop\ShopOnline\DataCa\obj\Debug\DataCa.dll
+C:\Users\rayze\OneDrive\Desktop\אלי7\תקשורת מחשבים\OnlineShop\ShopOnline\DataCa\obj\Debug\DataCa.pdb

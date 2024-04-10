@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewBag.Title = "PaymentCompleted";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-sm-12 text-center">
+        <br /><br />
+        @{
+            if ((bool)ViewData["Status"])
+            {
+                <h1 class="text-success">Thank You!</h1>
+                <h4>Id Transaction : @ViewData["IdTransaction"]</h4>
+                <br />
+                <a href="@Url.Action("Index","Shop")" class="btn btn-primary">Return to the store</a>
+            }
+            else
+            {
+                <h1 class="text-danger">Sorry!</h1>
+                <h2 class="text-success">Your payment was not successful</h2>
+                <br />
+                <a href="@Url.Action("Index","Shop")" class="btn btn-primary">Return to the store</a>
+            }
+        }
+
+    </div>
+</div>

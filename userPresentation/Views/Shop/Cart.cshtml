@@ -1,0 +1,368 @@
+﻿
+@{
+    ViewBag.Title = "Cart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <!--product details-->
+                        <div class="col-sm-9">
+                            <div class="me-2">
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="ms-2 mt-2">Detail Cart</h5>
+                                    <a class="btn btn-primary" href="@Url.Action("Index","Shop")">Continue shopping</a>
+                                </div>
+                                <hr class="mt-2 mb-2">
+                                <div id="products-cart">
+                                    <div class="card mb-2 card-product">
+                                        <div class="card-body">
+                                            <div class="row">
+
+                                                <div class="col-sm-2 align-self-center d-flex justify-content-center">
+                                                    <img class="rounded" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" style="width:100px;height:100px" />
+                                                </div>
+
+                                                <div class="col-sm-4 align-self-center">
+                                                    <span class="font-wight-bold d-block">Brand</span>
+                                                    <span>Product Name</span>
+                                                </div>
+
+                                                <div class="col-sm-2 align-self-center">
+                                                    <span>Price : S/. 1500</span>
+                                                </div>
+
+                                                <div class="col-sm-2 align-self-center">
+                                                    <div class="d-flex">
+                                                        <button class="btn btn-outline-secondary btn-restar rounded-0">
+                                                            -
+                                                        </button>
+                                                        <input class="form-control input-amount p-1 text-center rounded-0" disabled style="width:40px" />
+                                                        <button class="btn btn-outline-secondary btn-sumar rounded-0">
+                                                            +
+                                                        </button>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="col-sm-2 align-self-center">
+                                                    <button class="btn btn-outline-danger btn-delete">Delete</button>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-end">
+                                    <label class="align-self-center"><b>Total: <span id="total">0</span></b></label>
+                                </div>
+
+
+
+                            </div>
+
+                        </div>
+
+
+                        <!--shipping details-->
+                        <div class="col-sm-3">
+                            <div class="card">
+                                <div class="card-body bg-light">
+                                    <h5 class="card-title">Shipping details</h5>
+                                    <form>
+                                        <div class="mb-2">
+                                            <label for="exampleInputEmail" class="form-label">Address:</label>
+                                            <input type="text" class="form-control form-control-sm" id="txtaddress" />
+                                        </div>
+                                        <div class="mb-2">
+                                            <label for="exampleInputEmail" class="form-label">Telephone:</label>
+                                            <input type="text" class="form-control form-control-sm" id="txttel" />
+                                        </div>
+                                        <div class="mb-2">
+                                            <label for="exampleInputEmail" class="form-label">City:</label>
+                                            <input type="text" class="form-control form-control-sm" id="txtidcity" />
+                                        </div>
+                                        <div class="mb-2">
+                                            <label for="exampleInputEmail" class="form-label">Contact Name:</label>
+                                            <input type="text" class="form-control form-control-sm" id="txtcontactname" />
+                                        </div>
+                                        <div class="d-grid">
+                                            <button class=" btn btn-success" type="button" onclick="MakePayment()">
+                                                Complete and process payment
+                                            </button>
+
+                                        </div>
+
+                                    </form>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section scripts{
+    
+    <script>
+        $(document).ready(function () {
+            jQuery.ajax({
+                url: '@Url.Action("ListarProductCart", "Shop")',
+                type: 'POST',
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    $("#products-cart").html("");
+                    $("#products-cart").LoadingOverlay("hide");
+
+                    $.each(response.data, function (i, item) {
+
+                        $("<div>").addClass("card mb-2 card-product").append(
+                            $("<div>").addClass("card-body").append(
+                                $("<div>").addClass("row").append(
+                                    $("<div>").addClass("col-sm-2 align-self-center d-flex justify-content-center").append(
+                                        $("<img>").addClass("rounded").attr({ "src": "data:image/" + item.oProduct.Extension + ";base64," + item.oProduct.Base64 })
+                                            .css({ "width": "100px", "height": "100px" })
+                                    ),
+
+                                    $("<div>").addClass("col-sm-4 align-self-center").append(
+                                        $("<span>").addClass("font-wight-bold d-block").text(item.oProduct.oBrand.Description),
+                                        $("<span>").text(item.oProduct.Name)
+                                        
+                                    ),
+
+                                    $("<div>").addClass("col-sm-2 align-self-center").append(
+                                        $("<span>").text(item.oProduct.Price.toFixed(2) + " USD")
+                                     
+                                    ),
+                           
+
+                                   
+
+                                    $("<div>").addClass("col-sm-2 align-self-center").append(
+                                        $("<div>").addClass("d-flex").append(
+                                            $("<button>").addClass("btn btn-outline-secondary btn-restar rounded-0").append("-"),
+                                            $("<input>").addClass("form-control input-amount p-1 text-center rounded-0").attr({ "disabled": "disabled" })
+                                                .css({ "width": "40px" })
+                                                .data("oProduct", item.oProduct)
+                                                .val(item.Amount),
+                                            $("<button>").addClass("btn btn-outline-secondary btn-sumar rounded-0").append("+")
+
+
+                                        )
+                                    ),
+                                    $("<div>").addClass("col-sm-2 align-self-center").append(
+                                        $("<button>").addClass("btn btn-outline-danger btn-delete").append("Delete")
+                                            .data("idproduct", item.oProduct.IdProduct),
+
+                                    )
+
+
+                                )
+                            )
+                        ).appendTo("#products-cart")
+                    })
+                    sumTotal();
+                },
+                error: function (error) {
+                    $("#products-cart").LoadingOverlay("hide");
+                },
+                beforeSend: function () {
+                    $("#products-cart").LoadingOverlay("show");
+                }
+            });
+        })
+        function sumTotal() {
+            var sumTotal = parseFloat(0)
+
+            $("input.input-amount").each(function (i) {
+                var price = $(this).data("oProduct").Price;
+                var amount = parseFloat($(this).val())
+                var subtotal = price * amount;
+                sumTotal += subtotal;
+            })
+            $("#total").text(sumTotal.toFixed(2))
+            $("#total").data("sumtotal", sumTotal)
+
+        }
+
+        $(document).on("click", ".btn-sumar", function () {
+            var div_container = $(this).parent("div.d-flex");
+            var input_amount = $(div_container).find("input.input-amount");
+            var btn = $(this)
+            var idproduct = $(input_amount).data("oProduct").IdProduct;
+
+            jQuery.ajax({
+                url: '@Url.Action("cartOperation", "Shop")',
+                type: 'POST',
+                data: JSON.stringify({ idproduct: idproduct, sum: true }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+                    $(btn).LoadingOverlay("hide")
+
+                    if (data.res) {
+                        var amount = parseInt($(input_amount).val()) + 1;
+                        $(input_amount).val(amount)
+                        sumTotal()
+                    } else {
+                        swal("", data.message, "warning")
+                    }
+                },
+                beforeSend: function () {
+                    $(btn).LoadingOverlay("show")
+                },
+                error: function (error) {
+                    $(btn).LoadingOverlay("hide")
+
+                }
+            })
+
+        })
+
+        $(document).on("click", ".btn-restar", function () {
+            var div_container = $(this).parent("div.d-flex");
+            var input_amount = $(div_container).find("input.input-amount");
+            var btn = $(this)
+            var idproduct = $(input_amount).data("oProduct").IdProduct;
+            var amount = parseInt($(input_amount).val()) - 1;
+            if (amount >= 1) {
+                jQuery.ajax({
+                    url: '@Url.Action("cartOperation", "Shop")',
+                    type: 'POST',
+                    data: JSON.stringify({ idproduct: idproduct, sum: false }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+
+                        $(btn).LoadingOverlay("hide")
+
+                        if (data.res) {
+
+                            $(input_amount).val(amount)
+                            sumTotal()
+                        } else {
+                            swal("", data.message, "warning")
+                        }
+                    },
+                    beforeSend: function () {
+                        $(btn).LoadingOverlay("show")
+                    },
+                    error: function (error) {
+                        $(btn).LoadingOverlay("hide")
+
+                    }
+                })
+            }
+
+
+        })
+
+
+        $(document).on("click", ".btn-delete", function () {
+
+            var idproduct = $(this).data("idproduct");
+
+            var card_product = $(this).parents("div.card-product");
+
+
+                jQuery.ajax({
+                    url: '@Url.Action("DeleteCart", "Shop")',
+                    type: 'POST',
+                    data: JSON.stringify({ idproduct: idproduct }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+
+                        if (data.res) {
+                            card_product.remove();
+                            ShowTotalCart();
+                            sumTotal();
+
+                        } else {
+                            swal("", data.message, "warning")
+                        }
+                    }
+                })
+
+
+
+        })
+
+
+        function MakePayment() {
+            if (parseInt($("#totalcart").text()) == 0) {
+                swal("", "There are no products in the cart.", "warning");
+                return
+            }
+            if ($("#txtidcity").val() == "" || $("#txtcontactname").val() == "" || $("#txtaddress").val() == "" || $("#txttel").val() == "") {
+                swal("", "You must complete the shipping details.", "warning");
+                return
+            }
+
+            var sale = {
+                TotalProduct: $("input.input-amount").length,
+                OrderTotal: 0,
+                Contact: $("#txtcontactname").val(),
+                IdCity: $("#txtidcity").val(),
+                Tel: $("#txttel").val(),
+                Address: $("#txtaddress").val()
+            }
+
+            var list_cart = [];
+
+            $("input.input-amount").each(function (i) {
+                var product = $(this).data("oProduct");
+                var amount = parseFloat($(this).val())
+                list_cart.push({
+                    oProduct: product,
+                    Amount: amount
+
+                })
+            })
+            jQuery.ajax({
+                url: "@Url.Action("ProcessPayment", "Shop")",
+                type: "POST",
+                data: JSON.stringify({ oListCart: list_cart, oSales: sale }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $.LoadingOverlay("hide")
+                    if (data.Status) {
+
+                        var jsonresult = data.Response;
+                        var links = jsonresult.links;
+                        var res = links.find(item => item.rel === "approve");
+                        window.location.href = res.href
+
+                    } else {
+                        swal("", "Please try again later.", "warning");
+                    }
+                },
+                beforeSend: function () { $.LoadingOverlay("show") },
+                error: function (error) { $.LoadingOverlay("hide") }
+
+
+                
+            })
+
+        }
+
+
+    </script>
+    
+    }

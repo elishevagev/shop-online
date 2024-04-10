@@ -1,0 +1,263 @@
+﻿
+@{
+    ViewBag.Title = "Category";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<ol class="breadcrumb mb-4 mt-4">
+    <li class="breadcrumb-item"><a href="index.html">Mantenance</a></li>
+    <li class="breadcrumb-item active">Category</li>
+</ol>
+
+<div class="card">
+    <h5 class="card-header">Category List</h5>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <button type="button" class="btn btn-outline-primary" onclick="openModal(null)">Create New Category</button>
+
+            </div>
+        </div>
+        <hr />
+        <table id="table" class="table" style="width: 100%">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Active</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>
+
+                    </th>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+</div>
+
+<div class="modal" id="FormModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input id="txtid" type="hidden" value="0" />
+
+
+                <div class="row g-1">
+                    
+                    <div class="clo-sm-6">
+                        <label for="txtdescription" class="form-label">Description</label>
+                        <input type="text" class="form-control" id="txtdescription" autocomplete="off">
+                    </div>
+                    <div class="clo-sm-6">
+                        <label for="cboactive" class="form-label">Active</label>
+                        <select id="cboactive" class="form-select">
+                            <option value="1">Yes</option>
+                            <option value="2">No</option>
+
+                        </select>
+                    </div>
+
+                </div>
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <div id="messageError" class="alert alert-danger" role="alert">
+                            A simple danger alert—check it out!
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="Save()">Save</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts{
+    <script>
+        var tabledata;
+        var selectedRow
+
+
+        tabledata = $("#table").DataTable({
+            responsive: true,
+            ordering: false,
+            "ajax": {
+                url: '@Url.Action("ListCategory", "admin")',
+                type: "GET",
+                dataType: "json",
+            },
+            "columns": [
+                
+                { "data": "Description" },
+                {
+                    "data": "Active", "render": function (valor) {
+                        if (valor) {
+                            return '<span class="badge bg-success">Yes</span>'
+                        } else {
+                            return '<span class="badge bg-danger">No</span>'
+                        }
+                    }
+                },
+                {
+                    "defaultContent": '<button type="button" class="btn btn-primary btn-sm btn-edit">Edit</button>' + '<button type="button" class="btn btn-outline-danger ms-2 btn-delete ">Delete</button>',
+                    "orderable": false,
+                    "searchable": false,
+
+                }
+
+
+            ]
+
+        });
+        function openModal(json) {
+
+            $("#txtid").val(0);
+            $("#txtdescription").val("");
+            $("#cboactive").val("1");
+
+            $("#messageError").hide();
+
+            if (json != null) {
+                $("#txtid").val(json.IdCategory);
+                $("#txtdescription").val(json.Description);
+                if (json.Active) {
+                    $("#cboactive").val("1");
+                } else {
+                    $("#cboactive").val("2");
+                }
+
+
+            }
+            $("#FormModal").modal("show");
+        }
+
+        $(document).on("click", ".btn-edit", function () {
+            selectedRow = $(this).closest("tr");
+            var data = tabledata.row(selectedRow).data();
+            openModal(data)
+        })
+
+        $(document).on("click", ".btn-delete", function () {
+            var selectedcategory = $(this).closest("tr");
+            var data = tabledata.row(selectedcategory).data();
+
+            swal({
+                title: "Are you sure?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-primary",
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                closeOnConfirm: true
+
+            },
+                function () {
+                    jQuery.ajax({
+                        url: '@Url.Action("DeleteCategory","admin")',
+                        type: "POST",
+                        data: JSON.stringify({ id: data.IdCategory }),
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+                            if (data.result) {
+                                tabledata.row(selectedcategory).remove().draw();
+                            } else {
+                                swal("The category could not be deleted", data.message, "error")
+                            }
+                        },
+                        error: function (error) {
+                            console.log(error)
+                        }
+
+
+                    });
+
+
+
+            });
+
+
+            console.log(data);
+
+        })
+
+        function Save() {
+            var Category = {
+                IdCategory: $("#txtid").val(),
+                Description: $("#txtdescription").val(),
+                Active: $("#cboactive").val() == 1 ? true : false
+            }
+            jQuery.ajax({
+                url: '@Url.Action("SaveCategory", "admin")',
+                type: "POST",
+                data: JSON.stringify({ obje: Category }),
+                dataType: "json",
+                contentType: "application/json;  charset=utf-8",
+                success: function (data) {
+                    $(".modal-body").LoadingOverlay("hide");
+                    // NEW CATEGORY
+                    if (Category.IdCategory == 0) {
+                        if (data.result != 0) {
+                            Category.IdCategory = data.result;
+                            tabledata.row.add(Category).draw(false);
+                            $("#FormModal").modal("hide");
+                        } else {
+
+                            $("#messageError").text(data.message);
+                            $("#messageError").show();
+                        }
+
+                    }
+                    // EDIT CATEGORY
+                    else {
+                        if (data.result) {
+                            tabledata.row(selectedRow).data(Category).draw(false);
+                            selectedRow = null;
+                            $("#FormModal").modal("hide");
+
+                        } else {
+
+                            $("#messageError").text(data.message);
+                            $("#messageError").show();
+                        }
+
+                    }
+                },
+                error: function (error) {
+                    $(".modal-body").LoadingOverlay("hide");
+                    $("#messageError").text("error");
+                    $("#messageError").show();
+                },
+                beforeSend: function () {
+                    $(".modal-body").LoadingOverlay("show", {
+                        imageResizeFactor1: 2,
+                        text: "Loading...",
+                        size: 12
+                    })
+                }
+            });
+
+
+        }
+
+    </script>
+}
+

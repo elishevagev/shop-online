@@ -1,0 +1,6 @@
+C:\Users\rayze\OneDrive\Desktop\אלי7\תקשורת מחשבים\OnlineShop\ShopOnline\EntityCa\bin\Debug\EntityCa.dll
+C:\Users\rayze\OneDrive\Desktop\אלי7\תקשורת מחשבים\OnlineShop\ShopOnline\EntityCa\bin\Debug\EntityCa.pdb
+C:\Users\rayze\OneDrive\Desktop\אלי7\תקשורת מחשבים\OnlineShop\ShopOnline\EntityCa\obj\Debug\EntityCa.csproj.AssemblyReference.cache
+C:\Users\rayze\OneDrive\Desktop\אלי7\תקשורת מחשבים\OnlineShop\ShopOnline\EntityCa\obj\Debug\EntityCa.csproj.CoreCompileInputs.cache
+C:\Users\rayze\OneDrive\Desktop\אלי7\תקשורת מחשבים\OnlineShop\ShopOnline\EntityCa\obj\Debug\EntityCa.dll
+C:\Users\rayze\OneDrive\Desktop\אלי7\תקשורת מחשבים\OnlineShop\ShopOnline\EntityCa\obj\Debug\EntityCa.pdb
